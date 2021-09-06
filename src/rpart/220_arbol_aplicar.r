@@ -1,7 +1,7 @@
 #limpio la memoria
 rm( list=ls() )  #Borro todos los objetos
 gc()   #Garbage Collection
-# hola desde github
+
 require("data.table")
 require("rpart")
 
