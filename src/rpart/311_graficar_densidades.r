@@ -1,3 +1,4 @@
+library(dplyr)
 #limpio la memoria
 rm( list=ls() )  #remove all objects
 gc()             #garbage collection
@@ -6,7 +7,7 @@ require("data.table")
 
 
 #Aqui comienza el programa
-setwd("~/buckets/b1/crudoB/")
+setwd("D:/Cursos/Maestria en Big Data/MBD 2021/DM-Economia-Finanzas")  #Establezco el Working Directory
 
 datasetA  <- fread( "./datasetsOri/paquete_premium_202009.csv" )
 datasetB  <- fread( "./datasetsOri/paquete_premium_202011.csv" )
@@ -41,3 +42,9 @@ for( campo in  campos_buenos )
 
 }
 dev.off()
+
+grupos <- group_by(datasetA,internet)
+summarise(grupos,num = n())
+
+gruposB <- group_by(datasetB,internet)
+summarise(gruposB,num = n())
