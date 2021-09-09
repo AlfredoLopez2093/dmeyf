@@ -12,6 +12,11 @@ setwd("D:/Cursos/Maestria en Big Data/MBD 2021/DM-Economia-Finanzas")  #Establez
 datasetA  <- fread( "./datasetsOri/paquete_premium_202009.csv" )
 datasetB  <- fread( "./datasetsOri/paquete_premium_202011.csv" )
 
+grupos <- group_by(datasetA,mtarjeta_visa_descuentos)
+summarise(grupos,num = n())
+
+gruposB <- group_by(datasetB,mtarjeta_master_descuentos)
+summarise(gruposB,num = n())
 
 campos_buenos  <- setdiff(  colnames( datasetA),  c("numero_de_cliente","foto_mes","clase_ternaria" ) )
 
@@ -43,8 +48,4 @@ for( campo in  campos_buenos )
 }
 dev.off()
 
-grupos <- group_by(datasetA,internet)
-summarise(grupos,num = n())
 
-gruposB <- group_by(datasetB,internet)
-summarise(gruposB,num = n())

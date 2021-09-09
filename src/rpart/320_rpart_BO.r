@@ -20,12 +20,12 @@ require("mlrMBO")
 
 #para poder usarlo en la PC y en la nube
 switch ( Sys.info()[['sysname']],
-         Windows = { directory.root   <-  "M:\\" },   #Microsoft Windows
+         Windows = { directory.root   <-  "D:/Cursos/Maestria en Big Data/MBD 2021/DM-Economia-Finanzas" },   #Microsoft Windows
          Darwin  = { directory.root   <-  "~/dm/" },  #Apple MAC
          Linux   = { directory.root   <-  "~/buckets/b1/crudo/" }  #Entorno Google Cloud
        )
 #defino la carpeta donde trabajo
-setwd( directory.root )
+setwd("D:/Cursos/Maestria en Big Data/MBD 2021/DM-Economia-Finanzas")
 
 
 kexperimento  <- NA   #NA si se corre la primera vez, un valor concreto si es para continuar procesando
@@ -43,7 +43,7 @@ hs  <- makeParamSet(
           forbidden = quote( minbucket > 0.5*minsplit ) )
 
 
-ksemilla_azar  <- 102191
+ksemilla_azar  <- 946669
 #------------------------------------------------------------------------------
 #Funcion que lleva el registro de los experimentos
 
@@ -102,7 +102,7 @@ particionar  <- function( data, division, agrupa="", campo="fold", start=1, seed
 ArbolSimple  <- function( fold_test, data, param )
 {
   #genero el modelo
-  modelo  <- rpart("clase_ternaria ~ .", 
+  modelo  <- rpart("clase_ternaria ~ . -internet -mcajeros_propios_descuentos -mtarjeta_visa_descuentos -mtarjeta_master_descuentos -matm_other -tmobile_app -cmobile_app_trx -Master_Finiciomora -Master_madelantopesos -Master_madelantodolares -Visa_Finiciomora -Visa_mpagado", 
                    data= data[ fold != fold_test, ],
                    xval= 0,
                    control= param )
