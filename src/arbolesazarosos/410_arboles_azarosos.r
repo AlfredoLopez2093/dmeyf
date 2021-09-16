@@ -8,7 +8,7 @@ require("data.table")
 require("rpart")
 
 #Aqui se debe poner la carpeta de la computadora local
-setwd("~/buckets/b1/crudoB/")  #Establezco el Working Directory
+setwd("D:/Cursos/Maestria en Big Data/MBD 2021/DM-Economia-Finanzas")
 
 #cargo los datos donde entreno
 dtrain  <- fread("./datasetsOri/paquete_premium_202009.csv")
@@ -18,14 +18,19 @@ dapply  <- fread("./datasetsOri/paquete_premium_202011.csv")
 
 
 #Establezco cuales son los campos que puedo usar para la prediccion
-campos_buenos  <- setdiff(  colnames(dtrain) ,  c("clase_ternaria") )
+#campos_buenos  <- setdiff(  colnames(dtrain) ,  c("clase_ternaria") )
+campos_buenos  <- setdiff(  colnames(dtrain) ,  c("clase_ternaria","internet","mcajeros_propios_descuentos","mtarjeta_visa_descuentos","mtarjeta_master_descuentos","matm_other","tmobile_app","cmobile_app_trx","Master_Finiciomora","Master_madelantopesos","Master_madelantodolares","Visa_Finiciomora","Visa_mpagado") ) #azarosos008
 
-parametros  <-  list( "cp"=-1, "minsplit"=900,  "minbucket"=440, "maxdepth"=5 )
 
-num_trees         <-  10    #voy a generar 10 arboles
+#parametros  <-  list( "cp"=-1, "minsplit"=900,  "minbucket"=440, "maxdepth"=5 )
+#parametros  <-  list( "cp"=-0.803613435182936, "minsplit"=1943,  "minbucket"=452, "maxdepth"=20 ) #azarosos005
+#parametros  <-  list( "cp"=-0.0975526127480573, "minsplit"=2032,  "minbucket"=473, "maxdepth"=11 ) #azarosos006
+parametros  <-  list( "cp"=-0.803082571775553, "minsplit"=1050,  "minbucket"=471, "maxdepth"=18 ) #azarosos007
+
+num_trees         <-  200    #voy a generar 10 arboles
 feature_fraction  <-   0.5  #entreno cada arbol con solo 50% de las variables variables
 
-set.seed(102191) #Establezco la semilla aleatoria
+set.seed(946669) #Establezco la semilla aleatoria
 
 #inicializo en CERO el vector de las probabilidades en dapply
 #Aqui es donde voy acumulando, sumando, las probabilidades
@@ -65,5 +70,5 @@ entrega  <- as.data.table( list( "numero_de_cliente"= dapply[  , numero_de_clien
 
 #genero el archivo para Kaggle
 fwrite( entrega, 
-        file="./kaggle/arboles_azarosos_001.csv", 
+        file="./kaggle/arboles_azarosos_010.csv", 
         sep="," )

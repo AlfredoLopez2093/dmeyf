@@ -13,7 +13,8 @@ dtrain  <- fread("./datasetsOri/paquete_premium_202009.csv")
 
 #cargar aqui los parametros
 #parametros  <-  list( "cp"=-1, "minsplit"=750,  "minbucket"=375, "maxdepth"=5 )
-parametros  <-  list( "cp"=0, "minsplit"=50,  "minbucket"=5, "maxdepth"=14 )
+#parametros  <-  list( "cp"=0, "minsplit"=50,  "minbucket"=5, "maxdepth"=14 )
+parametros  <-  list( "cp"=-0.803613435182936, "minsplit"=1943,  "minbucket"=452, "maxdepth"=20 )
 
 modelo  <- rpart("clase_ternaria ~ .",
                  data= dtrain,
@@ -39,5 +40,5 @@ entrega  <- dapply[  , list(numero_de_cliente, Predicted) ] #genero la salida
 #        sep= "," )
 
 fwrite( entrega, 
-        file= paste0( "./kaggle/arbol_aplicado_mejor_param2.csv"), 
+        file= paste0( "./kaggle/arbol_aplicado_mejor_param160921_0115.csv"), 
         sep= "," )
