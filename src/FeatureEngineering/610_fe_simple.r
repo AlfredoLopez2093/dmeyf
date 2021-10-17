@@ -11,7 +11,7 @@ require("data.table")
 
 
 #Establezco el Working Directory
-setwd( "~/buckets/b1/crudoB" )
+setwd("D:/Cursos/Maestria en Big Data/MBD 2021/DM-Economia-Finanzas")
 
 
 EnriquecerDataset <- function( dataset , arch_destino )
@@ -21,19 +21,19 @@ EnriquecerDataset <- function( dataset , arch_destino )
   #INICIO de la seccion donde se deben hacer cambios con variables nuevas
   #se crean los nuevos campos para MasterCard  y Visa, teniendo en cuenta los NA's
   #varias formas de combinar Visa_status y Master_status
-  dataset[ , mv_status01       := pmax( Master_status,  Visa_status, na.rm = TRUE) ]
-  dataset[ , mv_status02       := Master_status +  Visa_status ]
-  dataset[ , mv_status03       := pmax( ifelse( is.na(Master_status), 10, Master_status) , ifelse( is.na(Visa_status), 10, Visa_status) ) ]
-  dataset[ , mv_status04       := ifelse( is.na(Master_status), 10, Master_status)  +  ifelse( is.na(Visa_status), 10, Visa_status)  ]
-  dataset[ , mv_status05       := ifelse( is.na(Master_status), 10, Master_status)  +  100*ifelse( is.na(Visa_status), 10, Visa_status)  ]
+  #dataset[ , mv_status01       := pmax( Master_status,  Visa_status, na.rm = TRUE) ]
+  #dataset[ , mv_status02       := Master_status +  Visa_status ]
+  #dataset[ , mv_status03       := pmax( ifelse( is.na(Master_status), 10, Master_status) , ifelse( is.na(Visa_status), 10, Visa_status) ) ]
+  #dataset[ , mv_status04       := ifelse( is.na(Master_status), 10, Master_status)  +  ifelse( is.na(Visa_status), 10, Visa_status)  ]
+  #dataset[ , mv_status05       := ifelse( is.na(Master_status), 10, Master_status)  +  100*ifelse( is.na(Visa_status), 10, Visa_status)  ]
 
-  dataset[ , mv_status06       := ifelse( is.na(Visa_status), 
-                                          ifelse( is.na(Master_status), 10, Master_status), 
-                                          Visa_status)  ]
+  #dataset[ , mv_status06       := ifelse( is.na(Visa_status), 
+  #                                        ifelse( is.na(Master_status), 10, Master_status), 
+  #                                        Visa_status)  ]
 
-  dataset[ , mv_status07       := ifelse( is.na(Master_status), 
-                                          ifelse( is.na(Visa_status), 10, Visa_status), 
-                                          Master_status)  ]
+  #dataset[ , mv_status07       := ifelse( is.na(Master_status), 
+  #                                        ifelse( is.na(Visa_status), 10, Visa_status), 
+  #                                        Master_status)  ]
 
 
   #combino MasterCard y Visa
@@ -48,9 +48,9 @@ EnriquecerDataset <- function( dataset , arch_destino )
   dataset[ , mv_mconsumosdolares     := rowSums( cbind( Master_mconsumosdolares,  Visa_mconsumosdolares) , na.rm=TRUE ) ]
   dataset[ , mv_mlimitecompra        := rowSums( cbind( Master_mlimitecompra,  Visa_mlimitecompra) , na.rm=TRUE ) ]
   dataset[ , mv_madelantopesos       := rowSums( cbind( Master_madelantopesos,  Visa_madelantopesos) , na.rm=TRUE ) ]
-  dataset[ , mv_madelantodolares     := rowSums( cbind( Master_madelantodolares,  Visa_madelantodolares) , na.rm=TRUE ) ]
+#  dataset[ , mv_madelantodolares     := rowSums( cbind( Master_madelantodolares,  Visa_madelantodolares) , na.rm=TRUE ) ]
   dataset[ , mv_fultimo_cierre       := pmax( Master_fultimo_cierre, Visa_fultimo_cierre, na.rm = TRUE) ]
-  dataset[ , mv_mpagado              := rowSums( cbind( Master_mpagado,  Visa_mpagado) , na.rm=TRUE ) ]
+#  dataset[ , mv_mpagado              := rowSums( cbind( Master_mpagado,  Visa_mpagado) , na.rm=TRUE ) ]
   dataset[ , mv_mpagospesos          := rowSums( cbind( Master_mpagospesos,  Visa_mpagospesos) , na.rm=TRUE ) ]
   dataset[ , mv_mpagosdolares        := rowSums( cbind( Master_mpagosdolares,  Visa_mpagosdolares) , na.rm=TRUE ) ]
   dataset[ , mv_fechaalta            := pmax( Master_fechaalta, Visa_fechaalta, na.rm = TRUE) ]
@@ -60,22 +60,22 @@ EnriquecerDataset <- function( dataset , arch_destino )
   dataset[ , mv_mpagominimo          := rowSums( cbind( Master_mpagominimo,  Visa_mpagominimo) , na.rm=TRUE ) ]
 
   #a partir de aqui juego con la suma de Mastercard y Visa
-  dataset[ , mvr_Master_mlimitecompra:= Master_mlimitecompra / mv_mlimitecompra ]
-  dataset[ , mvr_Visa_mlimitecompra  := Visa_mlimitecompra / mv_mlimitecompra ]
-  dataset[ , mvr_msaldototal         := mv_msaldototal / mv_mlimitecompra ]
-  dataset[ , mvr_msaldopesos         := mv_msaldopesos / mv_mlimitecompra ]
-  dataset[ , mvr_msaldopesos2        := mv_msaldopesos / mv_msaldototal ]
-  dataset[ , mvr_msaldodolares       := mv_msaldodolares / mv_mlimitecompra ]
-  dataset[ , mvr_msaldodolares2      := mv_msaldodolares / mv_msaldototal ]
-  dataset[ , mvr_mconsumospesos      := mv_mconsumospesos / mv_mlimitecompra ]
-  dataset[ , mvr_mconsumosdolares    := mv_mconsumosdolares / mv_mlimitecompra ]
-  dataset[ , mvr_madelantopesos      := mv_madelantopesos / mv_mlimitecompra ]
-  dataset[ , mvr_madelantodolares    := mv_madelantodolares / mv_mlimitecompra ]
-  dataset[ , mvr_mpagado             := mv_mpagado / mv_mlimitecompra ]
-  dataset[ , mvr_mpagospesos         := mv_mpagospesos / mv_mlimitecompra ]
-  dataset[ , mvr_mpagosdolares       := mv_mpagosdolares / mv_mlimitecompra ]
-  dataset[ , mvr_mconsumototal       := mv_mconsumototal  / mv_mlimitecompra ]
-  dataset[ , mvr_mpagominimo         := mv_mpagominimo  / mv_mlimitecompra ]
+#  dataset[ , mvr_Master_mlimitecompra:= Master_mlimitecompra / mv_mlimitecompra ]
+#  dataset[ , mvr_Visa_mlimitecompra  := Visa_mlimitecompra / mv_mlimitecompra ]
+#  dataset[ , mvr_msaldototal         := mv_msaldototal / mv_mlimitecompra ]
+#  dataset[ , mvr_msaldopesos         := mv_msaldopesos / mv_mlimitecompra ]
+#  dataset[ , mvr_msaldopesos2        := mv_msaldopesos / mv_msaldototal ]
+#  dataset[ , mvr_msaldodolares       := mv_msaldodolares / mv_mlimitecompra ]
+#  dataset[ , mvr_msaldodolares2      := mv_msaldodolares / mv_msaldototal ]
+#  dataset[ , mvr_mconsumospesos      := mv_mconsumospesos / mv_mlimitecompra ]
+#  dataset[ , mvr_mconsumosdolares    := mv_mconsumosdolares / mv_mlimitecompra ]
+#  dataset[ , mvr_madelantopesos      := mv_madelantopesos / mv_mlimitecompra ]
+#  dataset[ , mvr_madelantodolares    := mv_madelantodolares / mv_mlimitecompra ]
+#  dataset[ , mvr_mpagado             := mv_mpagado / mv_mlimitecompra ]
+#  dataset[ , mvr_mpagospesos         := mv_mpagospesos / mv_mlimitecompra ]
+#  dataset[ , mvr_mpagosdolares       := mv_mpagosdolares / mv_mlimitecompra ]
+#  dataset[ , mvr_mconsumototal       := mv_mconsumototal  / mv_mlimitecompra ]
+#  dataset[ , mvr_mpagominimo         := mv_mpagominimo  / mv_mlimitecompra ]
 
   #valvula de seguridad para evitar valores infinitos
   #paso los infinitos a NULOS

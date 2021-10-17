@@ -14,6 +14,7 @@ dapply  <- fread("./datasetsOri/paquete_premium_202011.csv")
 
 
 for( profundidad  in  c(2,3,4,5,6,7,8,10,12,14,16,18,20,22,24,26,28,30) )
+#for( profundidad  in  c(2,3) )
 {
   #genero el modelo
   cat(profundidad," ")
@@ -28,6 +29,9 @@ for( profundidad  in  c(2,3,4,5,6,7,8,10,12,14,16,18,20,22,24,26,28,30) )
   #prediccion es una matriz con TRES columnas, llamadas "BAJA+1", "BAJA+2"  y "CONTINUA"
   #cada columna es el vector de probabilidades 
   
+  #x1 = dapply[ , prob_baja2 := prediccion[, "BAJA+2"] ]
+  #x2 = dapply[ , Predicted  := as.numeric(prob_baja2 > 0.025) ]
+  
   dapply[ , prob_baja2 := prediccion[, "BAJA+2"] ]
   dapply[ , Predicted  := as.numeric(prob_baja2 > 0.025) ]
   
@@ -38,3 +42,4 @@ for( profundidad  in  c(2,3,4,5,6,7,8,10,12,14,16,18,20,22,24,26,28,30) )
           file= paste0( "./kaggle/K110_h",  profundidad, ".csv"), 
           sep= "," )
 }
+
