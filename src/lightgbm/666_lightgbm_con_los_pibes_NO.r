@@ -22,10 +22,13 @@ dataset[ , clase01:= ifelse( clase_ternaria=="CONTINUA", 0, 1 ) ]
 #campos_buenos  <- setdiff( colnames(dataset),
 #                           c("clase_ternaria", "clase01", "ccajas_transacciones", "Master_mpagominimo" ) )
 
-#Quito el Data Drifting de  "internet"  "tmobile_app" "cmobile_app_trx" "Master_Finiciomora" "Master_madelantodolares" "Visa_mpagado"
+#Quito el Data Drifting de  "internet"  "tmobile_app" "cmobile_app_trx" "Master_Finiciomora" 
+#                            "Master_madelantodolares" "Visa_mpagado" "mcajeros_propios_descuentos"
+#                            "mtarjeta_visa_descuentos" "mtarjeta_master_descuentos"
 campos_buenos  <- setdiff( colnames(dataset),
                            c("clase_ternaria", "clase01", "internet", "tmobile_app",
-                             "cmobile_app_trx","Master_Finiciomora","Master_madelantodolares","Visa_mpagado") )
+                             "cmobile_app_trx","Master_Finiciomora","Master_madelantodolares","Visa_mpagado",
+                             "mcajeros_propios_descuentos","mtarjeta_visa_descuentos","mtarjeta_master_descuentos") )
 
 
 #genero el formato requerido por LightGBM
@@ -47,11 +50,11 @@ modelo  <- lightgbm( data= dtrain,
 dapply  <- fread("./datasetsOri/paquete_premium_202011.csv")
 
 #calculo la importancia de variables
-kscript           <- "666_lightgbm2"
+kscript           <- "666_lightgbm3"
 kimp        <- paste0("./work/E", 1000, "_", kscript, "_" )
 tb_importancia  <- lgb.importance( model= modelo )
 fwrite( tb_importancia, 
-        file= paste0(kimp, "imp_", "lightgbm2", ".txt"),
+        file= paste0(kimp, "imp_", "lightgbm3", ".txt"),
         sep="\t" )
 
 
@@ -64,7 +67,7 @@ entrega  <- as.data.table( list( "numero_de_cliente"= dapply[  , numero_de_clien
 
 #genero el archivo para Kaggle
 fwrite( entrega, 
-        file= "./kaggle/lightgbm_con_los_pibes_NO_7v3.csv",
+        file= "./kaggle/lightgbm_con_los_pibes_NO_7v4.csv",
         sep=  "," )
 
 

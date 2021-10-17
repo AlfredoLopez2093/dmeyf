@@ -33,7 +33,7 @@ require("mlrMBO")
 #para poder usarlo en la PC y en la nube sin tener que cambiar la ruta
 #cambiar aqui las rutas en su maquina
 switch ( Sys.info()[['sysname']],
-         Windows = { directory.root  <-  "D:/Cursos/Maestria en Big Data/MBD 2021/DM-Economia-Finanzas" },   #Windows
+         Windows = { directory.root  <-  "" },   #Windows
          Darwin  = { directory.root  <-  "~/dm/" },  #Apple MAC
          Linux   = { directory.root  <-  "~/buckets/b1/" } #Google Cloud
        )
@@ -46,7 +46,7 @@ kexperimento  <- NA   #NA si se corre la primera vez, un valor concreto si es pa
 
 kscript         <- "823_epic"
 
-karch_dataset    <- "./datasets/dataset_epic_simple_v008.csv.gz"   #este dataset se genero en el script 812_dataset_epic.r
+karch_dataset    <- "./datasets/dataset_epic_simple_v009.csv.gz"   #este dataset se genero en el script 812_dataset_epic.r
 
 kapply_mes       <- c(202011)  #El mes donde debo aplicar el modelo
 
@@ -74,9 +74,7 @@ hs <- makeParamSet(
          makeIntegerParam("lambda_l2",       lower=    0.0   , upper= 200.0)
         )
 
-campos_malos  <- c("internet", "tmobile_app",
-                   "cmobile_app_trx","Master_Finiciomora","Master_madelantodolares","Visa_mpagado",
-                   "mcajeros_propios_descuentos","mtarjeta_visa_descuentos","mtarjeta_master_descuentos")   #aqui se deben cargar todos los campos culpables del Data Drifting
+campos_malos  <- c()   #aqui se deben cargar todos los campos culpables del Data Drifting
 
 ksemilla_azar  <- 946669  #Aqui poner la propia semilla
 #------------------------------------------------------------------------------
@@ -472,7 +470,7 @@ if(!file.exists(kbayesiana)) {
 
 
 #apagado de la maquina virtual, pero NO se borra
-#system( "sleep 10  &&  sudo shutdown -h now", wait=FALSE)
+system( "sleep 10  &&  sudo shutdown -h now", wait=FALSE)
 
 #suicidio,  elimina la maquina virtual directamente
 #system( "sleep 10  && 
