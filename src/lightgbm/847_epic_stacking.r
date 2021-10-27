@@ -33,7 +33,7 @@ require("mlrMBO")
 #para poder usarlo en la PC y en la nube sin tener que cambiar la ruta
 #cambiar aqui las rutas en su maquina
 switch ( Sys.info()[['sysname']],
-         Windows = { directory.root  <-  "M:\\" },   #Windows
+         Windows = { directory.root  <-  "D:/Cursos/Maestria en Big Data/MBD 2021/DM-Economia-Finanzas" },   #Windows
          Darwin  = { directory.root  <-  "~/dm/" },  #Apple MAC
          Linux   = { directory.root  <-  "~/buckets/b1/crudoB/" } #Google Cloud
        )
@@ -46,7 +46,7 @@ kexperimento  <- NA   #NA si se corre la primera vez, un valor concreto si es pa
 
 kscript         <- "847_epic_stacking"
 
-karch_dataset    <- "./datasets/dataset_stacking_v007.csv.gz"   #este dataset se genero en el script 812_dataset_epic.r
+karch_dataset    <- "./datasets/dataset_stacking_v002.csv.gz"   #este dataset se genero en el script 812_dataset_epic.r
 
 kapply_mes       <- c(202011)  #El mes donde debo aplicar el modelo
 
@@ -61,19 +61,24 @@ kgen_mes_hasta    <- 202009  #Obviamente, solo puedo entrenar hasta 202011
 kgen_mes_desde    <- 202009
 
 
-kBO_iter    <-  150   #cantidad de iteraciones de la Optimizacion Bayesiana
+#kBO_iter    <-  150   #cantidad de iteraciones de la Optimizacion Bayesiana
+kBO_iter    <-  100   #cantidad de iteraciones de la Optimizacion Bayesiana
 
 #Aqui se cargan los hiperparametros
 hs <- makeParamSet( 
          makeNumericParam("learning_rate",    lower=    0.02 , upper=    0.1),
          makeNumericParam("feature_fraction", lower=    0.1  , upper=    1.0),
          makeIntegerParam("min_data_in_leaf", lower=  100L   , upper= 8000L),
-         makeIntegerParam("num_leaves",       lower=    8L   , upper= 1024L)
+         makeIntegerParam("num_leaves",       lower=    8L   , upper= 1024L),
+         makeIntegerParam("lambda_l1",       lower=    0.0   , upper= 100.0),
+         makeIntegerParam("lambda_l2",       lower=    0.0   , upper= 200.0)
         )
 
-campos_malos  <- c()   #aqui se deben cargar todos los campos culpables del Data Drifting
+campos_malos  <- c("internet", "tmobile_app",
+                   "cmobile_app_trx","Master_Finiciomora","Master_madelantodolares","Visa_mpagado",
+                   "mcajeros_propios_descuentos","mtarjeta_visa_descuentos","mtarjeta_master_descuentos")   #aqui se deben cargar todos los campos culpables del Data Drifting
 
-ksemilla_azar  <- 102191  #Aqui poner la propia semilla
+ksemilla_azar  <- 946669  #Aqui poner la propia semilla
 #------------------------------------------------------------------------------
 #Funcion que lleva el registro de los experimentos
 
@@ -297,8 +302,6 @@ EstimarGanancia_lightgbm  <- function( x )
                           seed= 999983,
                           max_depth=  -1,         # -1 significa no limitar,  por ahora lo dejo fijo
                           min_gain_to_split= 0.0, #por ahora, lo dejo fijo
-                          lambda_l1= 0.0,         #por ahora, lo dejo fijo
-                          lambda_l2= 0.0,         #por ahora, lo dejo fijo
                           max_bin= 31,            #por ahora, lo dejo fijo
                           num_iterations= 9999,   #un numero muy grande, lo limita early_stopping_rounds
                           force_row_wise= TRUE    #para que los alumnos no se atemoricen con tantos warning
