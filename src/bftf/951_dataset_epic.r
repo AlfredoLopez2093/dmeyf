@@ -597,7 +597,7 @@ CanaritosImportancia  <- function( dataset )
 correr_todo  <- function( palancas )
 {
   #cargo el dataset ORIGINAL
-  dataset  <- fread( "./datasetsOri/paquete_premium_202011.csv.gz")
+  dataset  <- fread( "./datasetsOri/paquete_premium.csv.gz")
 
   setorder(  dataset, numero_de_cliente, foto_mes )  #ordeno el dataset
 
