@@ -12,6 +12,7 @@
 ## 2)Quito las filas de los meses: 201801 y 202006.
 ## 3)Activo palanca de feature engineering y creo nuevas variables
 ## 4)Activo palanca de lag1 a lag4
+## 5)Activo palanca de canaritos
 
 
 #limpio la memoria
