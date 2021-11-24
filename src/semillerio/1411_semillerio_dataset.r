@@ -44,7 +44,13 @@ Lags  <- function( cols, nlag, deltas )
 
 }
 #------------------------------------------------------------------------------
+ReportarCampos  <- function( dataset )
+{
+  cat( "La cantidad de campos es ", ncol(dataset) , "\n" )
+}
+
 #Elimina las variables que uno supone hace Data Drifting
+
 
 DriftEliminar  <- function( dataset, variables )
 {
