@@ -32,7 +32,8 @@ kgen_meses_malos <- 202006  #el mes que voy a eliminar del entreanamiento
 
 kgen_subsampling <- 1.0     #esto es NO hacer undersampling
 
-campos_malos  <- c()   #aqui se deben cargar todos los campos culpables del Data Drifting
+campos_malos  <- c("mrentabilidad","mrentabilidad_annual","mcomisiones","mactivos_margen",
+                   "mpasivos_margen","ccomisiones_otras","mcomisiones_otras","Visa_Finiciomora")   #aqui se deben cargar todos los campos culpables del Data Drifting
 
 #------------------------------------------------------------------------------
 #Funcion que lleva el registro de los experimentos
