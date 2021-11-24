@@ -16,6 +16,7 @@ directory.root  <-  "~/buckets/b1/"  #Google Cloud
 setwd( directory.root )
 
 #dataDrifting
+palancas  <- list()  #variable con las palancas para activar/desactivar
 palancas$variablesdrift  <- c("mrentabilidad","mrentabilidad_annual","mcomisiones","mactivos_margen",
                               "mpasivos_margen","ccomisiones_otras","mcomisiones_otras","Visa_Finiciomora")
 
