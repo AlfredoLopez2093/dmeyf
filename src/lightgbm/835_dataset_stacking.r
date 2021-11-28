@@ -10,7 +10,7 @@ gc()             #garbage collection
 
 require("data.table")
 
-setwd("~/buckets/b1/crudoB/" )
+setwd("~/buckets/b1/" )
 
 version  <- "v003"  #cambiar cada vez, asi se tiene versionado del dataset
 
