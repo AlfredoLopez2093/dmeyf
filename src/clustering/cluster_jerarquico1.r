@@ -59,10 +59,10 @@ while(  h>0  &  !( distintos >=6 & distintos <=7 ) )
 {
   h <- h - 1 
   rf.cluster  <- cutree( hclust.rf, h)
-
+  
   dataset[  , cluster2 := NULL ]
   dataset[  , cluster2 := rf.cluster ]
-
+  
   distintos  <- nrow( dataset[  , .N,  cluster2 ] )
   cat( distintos, " " )
 }
@@ -72,6 +72,9 @@ while(  h>0  &  !( distintos >=6 & distintos <=7 ) )
 
 dataset[  , .N,  cluster2 ]  #tamaño de los clusters
 
+#cambio la etiqueta del cluster para que lo tome como etiqueta discreta
+dataset[ , etiq:= paste("c",cluster2,sep = "") ]
+class(dataset)
 #ahora a mano veo las variables
 dataset[  , mean(ctrx_quarter),  cluster2 ]  #media de la variable  ctrx_quarter
 dataset[  , mean(cpayroll_trx),  cluster2 ]
@@ -83,6 +86,7 @@ dataset[  , mean(mrentabilidad_annual),  cluster2 ]
 dataset[  , mean(mprestamos_personales),  cluster2 ]
 dataset[  , mean(mactivos_margen),  cluster2 ]
 dataset[  , mean(mpayroll),  cluster2 ]
+
 dataset[  , mean(Visa_mpagominimo),  cluster2 ]
 dataset[  , mean(Master_fechaalta),  cluster2 ]
 dataset[  , mean(cliente_edad),  cluster2 ]
@@ -95,7 +99,76 @@ dataset[  , mean(Master_Fvencimiento),  cluster2 ]
 dataset[  , mean(mcuenta_corriente),  cluster2 ]
 dataset[  , mean(Visa_mpagospesos),  cluster2 ]
 dataset[  , mean(Visa_fechaalta),  cluster2 ]
+
 dataset[  , mean(mcomisiones_mantenimiento),  cluster2 ]
 dataset[  , mean(Visa_mfinanciacion_limite),  cluster2 ]
+dataset[  , mean(mtransferencias_recibidas),  cluster2 ]
+dataset[  , mean(cliente_antiguedad),  cluster2 ]
+dataset[  , mean(Visa_mconsumospesos),  cluster2 ]
+dataset[  , mean(Master_mfinanciacion_limite),  cluster2 ]
+dataset[  , mean(mcaja_ahorro_dolares),  cluster2 ]
+dataset[  , mean(cproductos),  cluster2 ]
 
+dataset[  , mean(mcomisiones_otras),  cluster2 ]
+dataset[  , mean(thomebanking),  cluster2 ]
+dataset[  , mean(mcuenta_debitos_automaticos),  cluster2 ]
+dataset[  , mean(mcomisiones),  cluster2 ]
+dataset[  , mean(Visa_cconsumos),  cluster2 ]
+
+dataset[  , mean(ccomisiones_otras),  cluster2 ]
+dataset[  , mean(Master_status),  cluster2 ]
+dataset[  , mean(mtransferencias_emitidas),  cluster2 ]
+dataset[  , mean(mpagomiscuentas),  cluster2 ]
+
+library(magrittr)
+library(datos)
+library(tidyverse)
+library(GGally)
+library(RColorBrewer)
+res = dataset %>% group_by(etiq) %>% summarise (mean(ctrx_quarter),
+                                                mean(cpayroll_trx),
+                                                mean(mcaja_ahorro),
+                                                mean(mtarjeta_visa_consumo),
+                                                mean(ctarjeta_visa_transacciones),
+                                                mean(mcuentas_saldo),
+                                                mean(mrentabilidad_annual),
+                                                mean(mprestamos_personales),
+                                                mean(mactivos_margen),
+                                                mean(mpayroll),
+                                                mean(Visa_mpagominimo),
+                                                mean(Master_fechaalta),
+                                                mean(cliente_edad),
+                                                mean(chomebanking_transacciones),
+                                                mean(Visa_msaldopesos),
+                                                mean(Visa_Fvencimiento),
+                                                mean(mrentabilidad),
+                                                mean(Visa_msaldototal),
+                                                mean(Master_Fvencimiento),
+                                                mean(mcuenta_corriente),
+                                                mean(Visa_mpagospesos),
+                                                mean(Visa_fechaalta),
+                                                mean(mcomisiones_mantenimiento),
+                                                mean(Visa_mfinanciacion_limite),
+                                                mean(mtransferencias_recibidas),
+                                                mean(cliente_antiguedad),
+                                                mean(Visa_mconsumospesos),
+                                                mean(Master_mfinanciacion_limite),
+                                                mean(mcaja_ahorro_dolares),
+                                                mean(cproductos),
+                                                mean(mcomisiones_otras),
+                                                mean(thomebanking),
+                                                mean(mcuenta_debitos_automaticos),
+                                                mean(mcomisiones),
+                                                mean(Visa_cconsumos),
+                                                mean(ccomisiones_otras),
+                                                mean(Master_status),
+                                                mean(mtransferencias_emitidas),
+                                                mean(mpagomiscuentas))
+#class(res)
+View(res)
+ggparcoord(data = res,
+           columns = 2:40,
+           groupColumn = "etiq")
+
+write.csv(dataset,file="cluster.csv")
 
