@@ -54,7 +54,7 @@ hclust.rf  <- hclust( as.dist ( 1.0 - modelo$proximity),  #distancia = 1.0 - pro
                       method= "ward.D2" )
 
 
-pdf( paste0( paste0("./work/cluster_jerarquico.pdf" ) ))
+pdf( paste0( paste0("./work/cluster_jerarquico2.pdf" ) ))
 plot( hclust.rf )
 dev.off()
 
@@ -66,10 +66,10 @@ while(  h>0  &  !( distintos >=6 & distintos <=7 ) )
 {
   h <- h - 1 
   rf.cluster  <- cutree( hclust.rf, h)
-
+  
   dataset[  , cluster2 := NULL ]
   dataset[  , cluster2 := rf.cluster ]
-
+  
   distintos  <- nrow( dataset[  , .N,  cluster2 ] )
   cat( distintos, " " )
 }
@@ -115,28 +115,140 @@ library(tidyverse)
 library(GGally)
 library(RColorBrewer)
 
-res = dataset %>% group_by(etiq) %>% summarise (mean(Visa_status),
-                                                mean(ctrx_quarter),
-                                                mean(mdescubierto_preacordado),
-                                                mean(mcuentas_saldo),
-                                                mean(mcuenta_corriente),
-                                                mean(Visa_Finiciomora),
-                                                mean(mprestamos_personales),
-                                                mean(mrentabilidad),
-                                                mean(cpayroll_trx),
-                                                mean(mcaja_ahorro),
-                                                mean(Visa_msaldototal),
-                                                mean(mactivos_margen),
-                                                mean(mpasivos_margen),
-                                                mean(mpayroll),
-                                                mean(Visa_fultimo_cierre),
-                                                mean(Visa_mpagado),
-                                                mean(ctarjeta_visa_transacciones),
-                                                mean(mrentabilidad_annual),
-                                                mean(Visa_fechaalta),
-                                                mean(ctarjeta_master))
+res = dataset %>% group_by(clasif) %>% summarise (mean(Visa_status),
+                                                  mean(ctrx_quarter),
+                                                  mean(mdescubierto_preacordado),
+                                                  mean(mcuentas_saldo),
+                                                  mean(mcuenta_corriente),
+                                                  mean(Visa_Finiciomora),
+                                                  mean(mprestamos_personales),
+                                                  mean(mrentabilidad),
+                                                  mean(cpayroll_trx),
+                                                  mean(mcaja_ahorro),
+                                                  mean(Visa_msaldototal),
+                                                  mean(mactivos_margen),
+                                                  mean(mpasivos_margen),
+                                                  mean(mpayroll),
+                                                  mean(Visa_fultimo_cierre),
+                                                  mean(Visa_mpagado),
+                                                  mean(ctarjeta_visa_transacciones),
+                                                  mean(mrentabilidad_annual),
+                                                  mean(Visa_fechaalta),
+                                                  mean(ctarjeta_master))
 
 View(res)
 ggparcoord(data = res,
            columns = 2:21,
            groupColumn = "clasif")
+
+library(fmsb)
+data_for_radar <- as.data.frame(res)
+rownames(data_for_radar) <- data_for_radar$clasif
+data_for_radar <- data_for_radar[, -c(1)]
+data_for_radar
+
+normalize <- function(x) {
+  return((x - min(x)) / (max(x) - min(x)))
+}
+
+
+data_for_radar['mean(Visa_status)']=normalize(data_for_radar['mean(Visa_status)'])
+data_for_radar['mean(ctrx_quarter)']=normalize(data_for_radar['mean(ctrx_quarter)'])
+data_for_radar['mean(mdescubierto_preacordado)']=normalize(data_for_radar['mean(mdescubierto_preacordado)'])
+data_for_radar['mean(mcuentas_saldo)']=normalize(data_for_radar['mean(mcuentas_saldo)'])
+data_for_radar['mean(mcuenta_corriente)']=normalize(data_for_radar['mean(mcuenta_corriente)'])
+data_for_radar['mean(Visa_Finiciomora)']=normalize(data_for_radar['mean(Visa_Finiciomora)'])
+data_for_radar['mean(mprestamos_personales)']=normalize(data_for_radar['mean(mprestamos_personales)'])
+data_for_radar['mean(mrentabilidad)']=normalize(data_for_radar['mean(mrentabilidad)'])
+data_for_radar['mean(cpayroll_trx)']=normalize(data_for_radar['mean(cpayroll_trx)'])
+data_for_radar['mean(mcaja_ahorro)']=normalize(data_for_radar['mean(mcaja_ahorro)'])
+data_for_radar['mean(Visa_msaldototal)']=normalize(data_for_radar['mean(Visa_msaldototal)'])
+data_for_radar['mean(mactivos_margen)']=normalize(data_for_radar['mean(mactivos_margen)'])
+data_for_radar['mean(mpasivos_margen)']=normalize(data_for_radar['mean(mpasivos_margen)'])
+data_for_radar['mean(mpayroll)']=normalize(data_for_radar['mean(mpayroll)'])
+data_for_radar['mean(Visa_fultimo_cierre)']=normalize(data_for_radar['mean(Visa_fultimo_cierre)'])
+data_for_radar['mean(Visa_mpagado)']=normalize(data_for_radar['mean(Visa_mpagado)'])
+data_for_radar['mean(ctarjeta_visa_transacciones)']=normalize(data_for_radar['mean(ctarjeta_visa_transacciones)'])
+data_for_radar['mean(mrentabilidad_annual)']=normalize(data_for_radar['mean(mrentabilidad_annual)'])
+data_for_radar['mean(Visa_fechaalta)']=normalize(data_for_radar['mean(Visa_fechaalta)'])
+data_for_radar['mean(ctarjeta_master)']=normalize(data_for_radar['mean(ctarjeta_master)'])
+
+#Renombro columnas
+names(data_for_radar)[names(data_for_radar) =='mean(Visa_status)'] ='Visa_status'
+names(data_for_radar)[names(data_for_radar) =='mean(ctrx_quarter)'] ='ctrx_quarter'
+names(data_for_radar)[names(data_for_radar) =='mean(mdescubierto_preacordado)'] ='mdescubierto_preacordado'
+names(data_for_radar)[names(data_for_radar) =='mean(mcuentas_saldo)'] ='mcuentas_saldo'
+names(data_for_radar)[names(data_for_radar) =='mean(mcuenta_corriente)'] ='mcuenta_corriente'
+names(data_for_radar)[names(data_for_radar) =='mean(Visa_Finiciomora)'] ='Visa_Finiciomora'
+names(data_for_radar)[names(data_for_radar) =='mean(mprestamos_personales)'] ='mprestamos_personales'
+names(data_for_radar)[names(data_for_radar) =='mean(mrentabilidad)'] ='mrentabilidad'
+names(data_for_radar)[names(data_for_radar) =='mean(cpayroll_trx)'] ='cpayroll_trx'
+names(data_for_radar)[names(data_for_radar) =='mean(mcaja_ahorro)'] ='mcaja_ahorro'
+names(data_for_radar)[names(data_for_radar) =='mean(Visa_msaldototal)'] ='Visa_msaldototal'
+names(data_for_radar)[names(data_for_radar) =='mean(mes)'] ='mes'
+names(data_for_radar)[names(data_for_radar) =='mean(mactivos_margen)'] ='mactivos_margen'
+names(data_for_radar)[names(data_for_radar) =='mean(foto_mes)'] ='foto_mes'
+names(data_for_radar)[names(data_for_radar) =='mean(mpasivos_margen)'] ='mpasivos_margen'
+names(data_for_radar)[names(data_for_radar) =='mean(mpayroll)'] ='mpayroll'
+names(data_for_radar)[names(data_for_radar) =='mean(Visa_fultimo_cierre)'] ='Visa_fultimo_cierre'
+names(data_for_radar)[names(data_for_radar) =='mean(Visa_mpagado)'] ='Visa_mpagado'
+names(data_for_radar)[names(data_for_radar) =='mean(ctarjeta_visa_transacciones)'] ='ctarjeta_visa_transacciones'
+names(data_for_radar)[names(data_for_radar) =='mean(mrentabilidad_annual)'] ='mrentabilidad_annual'
+names(data_for_radar)[names(data_for_radar) =='mean(Visa_fechaalta)'] ='Visa_fechaalta'
+names(data_for_radar)[names(data_for_radar) =='mean(ctarjeta_master)'] ='ctarjeta_master'
+
+data_for_radar
+
+
+#Funcion para armar el radar
+create_beautiful_radarchart <- function(data, color = "#00AFBB", 
+                                        vlabels = colnames(data), vlcex = 0.7,
+                                        caxislabels = NULL, title = NULL, ...){
+  radarchart(
+    data, axistype = 1,
+    # Customize the polygon
+    pcol = color, pfcol = scales::alpha(color, 0.5), plwd = 2, plty = 1,
+    # Customize the grid
+    cglcol = "grey", cglty = 1, cglwd = 0.8,
+    # Customize the axis
+    axislabcol = "grey", 
+    # Variable labels
+    vlcex = vlcex, vlabels = vlabels,
+    caxislabels = caxislabels, title = title, ...
+  )
+}
+
+#Agrego los valores min y max para cada variable
+data_for_radar <- rbind(rep(max(data_for_radar), 20), rep(0, 20), data_for_radar)
+data_for_radar
+
+#Grafico los radares
+
+cluster1 <- data_for_radar[c(1, 2, "c1"),]
+#op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster1,caxislabels = c(0, 0.25,0.5,0.75,1))
+
+cluster2 <- data_for_radar[c(1, 2, "c2"),]
+#op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster2,caxislabels = c(0, 0.25,0.5,0.75,1))
+
+cluster3 <- data_for_radar[c(1, 2, "c3"),]
+#op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster3,caxislabels = c(0, 0.25,0.5,0.75,1))
+
+cluster4 <- data_for_radar[c(1, 2, "c4"),]
+#op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster4,caxislabels = c(0, 0.25,0.5,0.75,1))
+
+cluster5 <- data_for_radar[c(1, 2, "c5"),]
+#op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster5,caxislabels = c(0, 0.25,0.5,0.75,1))
+
+cluster6 <- data_for_radar[c(1, 2, "c6"),]
+#op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster6,caxislabels = c(0, 0.25,0.5,0.75,1))
+
+cluster7 <- data_for_radar[c(1, 2, "c7"),]
+#op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster7,caxislabels = c(0, 0.25,0.5,0.75,1))
+
