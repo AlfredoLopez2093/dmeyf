@@ -139,7 +139,8 @@ res = dataset %>% group_by(clasif) %>% summarise (mean(Visa_status),
 View(res)
 ggparcoord(data = res,
            columns = 2:21,
-           groupColumn = "clasif")
+           groupColumn = "clasif",
+           scale = "uniminmax")
 
 library(fmsb)
 data_for_radar <- as.data.frame(res)
@@ -225,30 +226,50 @@ data_for_radar
 #Grafico los radares
 
 cluster1 <- data_for_radar[c(1, 2, "c1"),]
-#op <- par(mar = c(1, 2, 2, 1))
-create_beautiful_radarchart(cluster1,caxislabels = c(0, 0.25,0.5,0.75,1))
+op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster1,caxislabels = c(0, 0.25,0.5,0.75,1),title="cluster1")
 
 cluster2 <- data_for_radar[c(1, 2, "c2"),]
-#op <- par(mar = c(1, 2, 2, 1))
-create_beautiful_radarchart(cluster2,caxislabels = c(0, 0.25,0.5,0.75,1))
+op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster2,caxislabels = c(0, 0.25,0.5,0.75,1),title="cluster2")
 
 cluster3 <- data_for_radar[c(1, 2, "c3"),]
-#op <- par(mar = c(1, 2, 2, 1))
-create_beautiful_radarchart(cluster3,caxislabels = c(0, 0.25,0.5,0.75,1))
+op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster3,caxislabels = c(0, 0.25,0.5,0.75,1),title="cluster3")
 
 cluster4 <- data_for_radar[c(1, 2, "c4"),]
-#op <- par(mar = c(1, 2, 2, 1))
-create_beautiful_radarchart(cluster4,caxislabels = c(0, 0.25,0.5,0.75,1))
+op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster4,caxislabels = c(0, 0.25,0.5,0.75,1),title="cluster4")
 
 cluster5 <- data_for_radar[c(1, 2, "c5"),]
-#op <- par(mar = c(1, 2, 2, 1))
-create_beautiful_radarchart(cluster5,caxislabels = c(0, 0.25,0.5,0.75,1))
+op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster5,caxislabels = c(0, 0.25,0.5,0.75,1),title="cluster5")
 
 cluster6 <- data_for_radar[c(1, 2, "c6"),]
-#op <- par(mar = c(1, 2, 2, 1))
-create_beautiful_radarchart(cluster6,caxislabels = c(0, 0.25,0.5,0.75,1))
+op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster6,caxislabels = c(0, 0.25,0.5,0.75,1),title="cluster6")
 
 cluster7 <- data_for_radar[c(1, 2, "c7"),]
-#op <- par(mar = c(1, 2, 2, 1))
-create_beautiful_radarchart(cluster7,caxislabels = c(0, 0.25,0.5,0.75,1))
+op <- par(mar = c(1, 2, 2, 1))
+create_beautiful_radarchart(cluster7,caxislabels = c(0, 0.25,0.5,0.75,1),title="cluster7")
 
+#Grafico los radares en dos graficos
+titles <- c("cluster1", "cluster2", "cluster3", "cluster4", "cluster5", "cluster6", "cluster7")
+
+# Reduce plot margin using par()
+# Split the screen in 4 parts
+op <- par(mar = c(1, 1, 1, 1))
+par(mfrow = c(1,3))
+
+# Create the radar chart
+for(i in 4:6){
+  nrocluster = paste("c",i,sep="")
+  datos = data_for_radar[c(1, 2, nrocluster),]
+  create_beautiful_radarchart(
+    data = datos, caxislabels = c(0, 0.25,0.5,0.75,1),title = titles[i]
+  )
+}
+par(op)
+
+library("xlsx")
+write.csv(res,file="promedios.csv")
