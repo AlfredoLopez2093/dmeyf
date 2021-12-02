@@ -257,12 +257,12 @@ create_beautiful_radarchart(cluster7,caxislabels = c(0, 0.25,0.5,0.75,1),title="
 titles <- c("cluster1", "cluster2", "cluster3", "cluster4", "cluster5", "cluster6", "cluster7")
 
 # Reduce plot margin using par()
-# Split the screen in 4 parts
+# Split the screen in 3-4 parts
 op <- par(mar = c(1, 1, 1, 1))
 par(mfrow = c(1,3))
 
 # Create the radar chart
-for(i in 4:6){
+for(i in 5:7){
   nrocluster = paste("c",i,sep="")
   datos = data_for_radar[c(1, 2, nrocluster),]
   create_beautiful_radarchart(

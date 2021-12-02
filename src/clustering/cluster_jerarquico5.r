@@ -54,7 +54,7 @@ hclust.rf  <- hclust( as.dist ( 1.0 - modelo$proximity),  #distancia = 1.0 - pro
                       method= "ward.D2" )
 
 
-pdf( paste0( paste0("./work/cluster_jerarquico2.pdf" ) ))
+pdf( paste0( paste0("./work/cluster_jerarquico5.pdf" ) ))
 plot( hclust.rf )
 dev.off()
 
